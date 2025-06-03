@@ -21,38 +21,11 @@ This project is a **Smart Parking Detection System** built to explore real-time 
 - **YOLOv8** (via [Ultralytics](https://github.com/ultralytics/ultralytics))
 - **OpenCV**
 - **NumPy**
-- Optional: Webcam or pre-recorded video input
 
----
-
-## 🚀 Getting Started
-
-### 1. Clone the repository
-
-```bash
-git clone https://github.com/your-username/smart-parking-detection.git
-cd smart-parking-detection
-```
-
-### 2. Install Dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-### 3. Run the System
-
-```bash
-python main.py
-```
-
-> ⚠️ Make sure YOLOv8 weights are downloaded or configured in the script.
-
----
 
 ## 📸 How It Works
 
-1. Loads a video stream (live or recorded).
+1. Loads a video stream.
 2. Detects vehicles frame-by-frame using YOLOv8.
 3. Checks if detected vehicles overlap with user-defined parking slot polygons.
 4. Updates and displays real-time availability on the video interface.
@@ -71,12 +44,6 @@ python main.py
 ## 🙌 Why I Built This
 
 I created this project to get hands-on experience with **OpenCV**, **YOLOv8**, and **real-time computer vision**. It taught me how to handle live video processing, object detection, region mapping, and data overlays.
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License.
 
 ---
 
