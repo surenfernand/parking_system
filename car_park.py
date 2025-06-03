@@ -1,16 +1,18 @@
-import cv2
+import cv2 
 import pandas as pd
 import numpy as np
 from ultralytics import YOLO
 
 model = YOLO('yolov8l.pt')
 
+# Load the video file
 cap = cv2.VideoCapture('videos/parking_lot2.mp4')
 
+# Load the class names from the model file
 with open("model.txt", "r") as my_file:
     class_list = my_file.read().split("\n")
 
-  # Area Mark
+# Area Mark for Parking Spots
 areas = {
     22: [(2, 277), (2, 381), (69, 381), (69, 277)],
     23: [(75, 277), (75, 381), (134, 381), (134, 277)],
@@ -39,9 +41,12 @@ while True:
     if not ret:
         cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
         continue
-
+        # Frame Processing
     frame = cv2.resize(frame, (1020, 500))
 
+    # Object Detection
+    # verbose=False to suppress output (verbose - make it true for reading the predict output)
+    
     results = model.predict(frame, verbose=False)
     a = results[0].boxes.data
     px = pd.DataFrame(a).astype("float")
@@ -53,6 +58,9 @@ while True:
         x1, y1, x2, y2 = int(row[0]), int(row[1]), int(row[2]), int(row[3])
         class_id = int(row[5])
         label = class_list[class_id]
+        
+        # Yolov8 Sometimes detects objects as cars with another class like cell phone or suitcase in
+        # this case we will consider it as a car
 
         if label in ['car', 'cell phone', 'suitcase']:
             cx, cy = (x1 + x2) // 2, (y1 + y2) // 2
@@ -80,12 +88,12 @@ while True:
         color = (0, 255, 255) if occupied else (255, 255, 255)
         cv2.polylines(frame, [np.array(points, np.int32)], True, color, 2)
 
-
+    # Adding the counts of the parking spots
     text = f"Available Parking Spaces: {available_spots} / {total_spots}"
     cv2.rectangle(frame, (10, 10), (250, 40), (0, 0, 0), -1)
     cv2.putText(frame, text, (15, 35), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
 
-    cv2.imshow("Parking Manager", frame)
+    cv2.imshow("Parking Manager GUI", frame)
     if cv2.waitKey(1) & 0xFF == 27:
         break
 
